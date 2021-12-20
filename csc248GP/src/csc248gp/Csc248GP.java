@@ -10,7 +10,7 @@ public class Csc248GP {
         int j = 0;
         
         
-        asasdasd;
+        //asasdasd;
     }
     
 }
