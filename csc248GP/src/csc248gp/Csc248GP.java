@@ -4,7 +4,7 @@ package csc248gp;
 public class Csc248GP {
 
     
-    //hello
+    //hello world!
     public static void main(String[] args) {
         
         int j = 0;
