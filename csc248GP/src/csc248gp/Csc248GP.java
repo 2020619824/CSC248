@@ -6,7 +6,7 @@ public class Csc248GP {
     
     //hello
     public static void main(String[] args) {
-        c
+        
         int j = 0;
     }
     
