@@ -9,7 +9,10 @@ public class Csc248GP
         Scanner sc = new Scanner(System.in);
         
         Queue inputQ = new Queue();
+        Queue executeQ = new Queue();
+        Queue waitQ = new Queue();
         
+        //input
         char loop = 'Y';
         while (Character.toUpperCase(loop) == 'Y')
         {
@@ -24,6 +27,23 @@ public class Csc248GP
             
             Job newJob = new Job(job, aTime, bTime);
             inputQ.enqueue(newJob);
+        }
+        
+        //time loop
+        int time = 1;
+        for (int n=1; n<=time; n++)
+        {
+            System.out.println("\nTime: " +n);
+            
+            Job temp;
+            while (!inputQ.isEmpty())
+            {
+                temp = (Job)inputQ.dequeue();
+                
+                //if (temp)
+            }
+            
+            time++;
         }
     }
 }
