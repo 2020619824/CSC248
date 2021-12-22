@@ -12,4 +12,8 @@ public class Job {
         arrivalTime=a;
         burstTime=b;
     }
+    
+    public String getJob(){return job;}
+    public int getArrivalTime(){return arrivalTime;}
+    public int getBurstTime(){return burstTime;}
 }
