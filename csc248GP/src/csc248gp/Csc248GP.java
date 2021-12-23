@@ -137,5 +137,8 @@ public class Csc248GP
                 executeQ.enqueue(temp);
             }
         }
+        
+        System.out.print("\nAverage turn-around time: ");
+        System.out.print("\nAverage waiting time: ");
     }
 }
