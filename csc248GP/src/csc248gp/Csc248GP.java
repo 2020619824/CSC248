@@ -1,5 +1,8 @@
 package csc248gp;
 
+/*setakat ni mcm jadi cuma diye tak sorting. sbab tak buat lgi sorting tu kan.
+kalau korang ade ape2 nak tambah/ubah buat je mane tahu lgi better.*/
+
 import java.util.Scanner;
 public class Csc248GP 
 {
@@ -63,9 +66,9 @@ public class Csc248GP
         inputQ.enqueue(E);
         
         //time loop
-        boolean executeStatus = false;
+        boolean noJobExecute = true; //nak check sama dah ade ke process yg tengah execute
         int time = 1;
-        for (int n=1; n<=18; n++)
+        for (int n=1; n<=time; n++)
         {
             System.out.println("\nTime: " +n);
             
@@ -74,38 +77,49 @@ public class Csc248GP
             {
                 temp = (Job)inputQ.dequeue();
                 
-                if (temp.getArrivalTime()==n)
+                //check sama ade job tu dah boleh diexecute/belum
+                if (temp.getArrivalTime()==n) //kalau dh boleh
                 {
+                    if (noJobExecute)//kalau takde process yg tengah execute
+                    {
+                        noJobExecute = false;
+                        temp.setExecutingStatus(true);
+                    }
+                    temp.setToExecuteStatus(true);
                     executeQ.enqueue(temp);
-                    executeStatus = true;
                 }
-                else 
+                else //kalau belum
                     tempInputQ.enqueue(temp);
             }
-            if (executeQ.isEmpty())
+            
+            //check sama ada semua job dh diexecute/belum
+            if (executeQ.isEmpty()) //kalau dah
                 System.out.println("End");
-            else
+            else //kalau belum
                 time++;
             
             while (!executeQ.isEmpty())
             {
                 temp = (Job)executeQ.dequeue();
                 
-                if (n<=temp.getBurstTime() && executeStatus)
+                if (temp.getToExecuteStatus() && temp.getExecutingStatus()) //kalau job tu dh sampai pastu takde job yg tengah process, so diye akan buat yg ni
                 {
                     System.out.println("Job "+temp.getJob()+" is executing...");
-                    if (n==(temp.getBurstTime()+temp.getHoldTime()+temp.getArrivalTime()))
+                    if (n==(temp.getBurstTime()+temp.getHoldTime()+temp.getArrivalTime()-1))
                     {
-                        executeStatus = false;
+                        temp.setExecutingStatus(false);
                         doneQ.enqueue(temp);
                     }
                     else
                         tempExecuteQ.enqueue(temp);
                 }
-                else 
+                else //kalau job tu dh sampai pastu dah ade job yg tengah process, so diye akan buat yg ni
                 {
                     if (n==temp.getArrivalTime())
+                    {
                         System.out.println("Job "+temp.getJob()+" has arrived...");
+                        temp.setHoldTime(1);
+                    }
                     else
                         System.out.println("Job "+temp.getJob()+" is in hold for "+temp.getHoldTime()+"ms...");
                     
@@ -113,25 +127,28 @@ public class Csc248GP
                 }
             }
             
-            while (!waitQ.isEmpty())
+            while (!waitQ.isEmpty()) 
             {
                 temp = (Job)waitQ.dequeue(); 
                 
-                if (!tempExecuteQ.isEmpty())
+                //check kalau job yg tengah process tadi dah sudah/belum 
+                if (!tempExecuteQ.isEmpty()) //kalau belum
                 {
-                    temp.setHoldTime(temp.getHoldTime()+1);
+                    temp.setHoldTime(temp.getHoldTime()+1); //increment kan holdtime utk job yg tengah waiting tu
                 }
+                else //kalau sudah
+                    temp.setExecutingStatus(true);
                 
                 tempExecuteQ.enqueue(temp);
             }
             
-            while (!tempInputQ.isEmpty())
+            while (!tempInputQ.isEmpty()) //utk masukkan balik job ke dlm inputQ yg asal 
             {
                 temp = (Job)tempInputQ.dequeue();
                 inputQ.enqueue(temp);
             }
             
-            while (!tempExecuteQ.isEmpty())
+            while (!tempExecuteQ.isEmpty()) //utk masukkan balik job ke dlm executeQ yg asal
             {
                 temp = (Job)tempExecuteQ.dequeue();
                 executeQ.enqueue(temp);
