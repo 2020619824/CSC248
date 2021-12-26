@@ -1,6 +1,6 @@
 package csc248gp;
 
-/*setakat ni mcm jadi cuma diye tak sorting. sbab tak buat lgi sorting tu kan.
+/*Yeay dh jadi sorting tu :D
 kalau korang ade ape2 nak tambah/ubah buat je mane tahu lgi better.*/
 
 import java.util.Scanner;
@@ -127,6 +127,9 @@ public class Csc248GP
                 }
             }
             
+            //sortingkan jobs yg tengah in hold tu
+            waitQ = Sorting(waitQ); 
+            
             while (!waitQ.isEmpty()) 
             {
                 temp = (Job)waitQ.dequeue(); 
@@ -157,5 +160,46 @@ public class Csc248GP
         
         System.out.print("\nAverage turn-around time: ");
         System.out.print("\nAverage waiting time: ");
+    }
+    
+    //sorting data yg ada dlm queue tu ikut burst time
+    //https://youtu.be/Z0hQsqJQYoc : concept nak sorting queue
+    public static Queue Sorting(Queue job)
+    {
+        Queue tempJob = new Queue();
+        
+        int size = 0;
+        while (!job.isEmpty())
+        {
+            Job temp = (Job)job.dequeue();
+            tempJob.enqueue(temp);
+            size++;
+        }
+        
+        Job temp;
+        
+        for (int x=0; x<size; x++)
+        {   
+            Job a = (Job)tempJob.dequeue();
+            while (!tempJob.isEmpty())
+            {
+                Job b = (Job)tempJob.dequeue();
+                if (a.getBurstTime()<=b.getBurstTime())
+                {
+                    temp = a;
+                    a = b;
+                    b = temp;
+                }
+                job.enqueue(b);
+            }
+            job.enqueue(a);
+            while (!job.isEmpty())
+            {
+                Job curr = (Job)job.dequeue();
+                tempJob.enqueue(curr);
+            }
+        }
+        
+        return tempJob;
     }
 }
