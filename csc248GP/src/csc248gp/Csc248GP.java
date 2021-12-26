@@ -16,7 +16,8 @@ public class Csc248GP
         Queue tempExecuteQ = new Queue();
         Queue waitQ = new Queue();
         Queue doneQ = new Queue();
-        
+        int completeTime=0;
+        int totalCompleteTime=0;
         //input
         /*char loop = 'Y';
         while (Character.toUpperCase(loop) == 'Y')
@@ -109,6 +110,7 @@ public class Csc248GP
                     {
                         temp.setExecutingStatus(false);
                         doneQ.enqueue(temp);
+                        completeTime=n+1;//camni nk cari completion time x silap tapi x tahu nk letak kat mana
                     }
                     else
                         tempExecuteQ.enqueue(temp);
@@ -127,6 +129,7 @@ public class Csc248GP
                 }
             }
             
+            
             //sortingkan jobs yg tengah in hold tu
             waitQ = Sorting(waitQ); 
             
@@ -139,9 +142,10 @@ public class Csc248GP
                 {
                     temp.setHoldTime(temp.getHoldTime()+1); //increment kan holdtime utk job yg tengah waiting tu
                 }
-                else //kalau sudah
+                else{ //kalau sudah
                     temp.setExecutingStatus(true);
-                
+                    
+                }
                 tempExecuteQ.enqueue(temp);
             }
             
@@ -156,9 +160,11 @@ public class Csc248GP
                 temp = (Job)tempExecuteQ.dequeue();
                 executeQ.enqueue(temp);
             }
+            
+            totalCompleteTime+=completeTime;   
         }
         
-        System.out.print("\nAverage turn-around time: ");
+        System.out.print("\nAverage turn-around time: "+totalCompleteTime);
         System.out.print("\nAverage waiting time: ");
     }
     
