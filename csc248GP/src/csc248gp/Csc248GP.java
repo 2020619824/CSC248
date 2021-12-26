@@ -15,9 +15,14 @@ public class Csc248GP
         Queue executeQ = new Queue();
         Queue tempExecuteQ = new Queue();
         Queue waitQ = new Queue();
+        Queue tempDoneQ=new Queue();
         Queue doneQ = new Queue();
         int completeTime=0;
         int totalCompleteTime=0;
+        double tt=0.0;
+        double wt=0.0;
+        double totalTT=0.0;
+        double totalWT=0.0;
         //input
         /*char loop = 'Y';
         while (Character.toUpperCase(loop) == 'Y')
@@ -109,8 +114,8 @@ public class Csc248GP
                     if (n==(temp.getBurstTime()+temp.getHoldTime()+temp.getArrivalTime()-1))
                     {
                         temp.setExecutingStatus(false);
-                        doneQ.enqueue(temp);
-                        completeTime=n+1;//camni nk cari completion time x silap tapi x tahu nk letak kat mana
+                        temp.setCompletionTime(n+1);
+                        tempDoneQ.enqueue(temp);
                     }
                     else
                         tempExecuteQ.enqueue(temp);
@@ -161,11 +166,25 @@ public class Csc248GP
                 executeQ.enqueue(temp);
             }
             
-            totalCompleteTime+=completeTime;   
+            while(!tempDoneQ.isEmpty()){
+                temp=(Job) tempDoneQ.dequeue();
+                totalCompleteTime+=temp.getCompletionTime();
+                doneQ.enqueue(temp);
+            }
+            
+            while(!doneQ.isEmpty()){
+                temp=(Job)doneQ.dequeue();
+                tt=temp.getCompletionTime()-temp.getArrivalTime();
+                wt=temp.getCompletionTime()-(temp.getArrivalTime()+temp.getBurstTime());
+                totalTT+=tt;
+                totalWT+=wt;
+            }
+               
         }
         
-        System.out.print("\nAverage turn-around time: "+totalCompleteTime);
-        System.out.print("\nAverage waiting time: ");
+        //dah dapat TT dgn WT
+        System.out.print("\nAverage turn-around time: "+totalTT/5);
+        System.out.print("\nAverage waiting time: "+totalWT/5);
     }
     
     //sorting data yg ada dlm queue tu ikut burst time
