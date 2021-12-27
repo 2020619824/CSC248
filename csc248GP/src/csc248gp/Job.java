@@ -9,6 +9,7 @@ public class Job {
     private int holdTime;
     private boolean toExecuteStatus;
     private boolean executingStatus;
+    private int completeTime;
     
     public Job()
     {
@@ -18,6 +19,7 @@ public class Job {
         holdTime=0;
         toExecuteStatus = false;
         executingStatus = false;
+        completeTime=0;
     }
     
     public Job(String j,int a,int b){
@@ -32,6 +34,7 @@ public class Job {
     public void setHoldTime(int h){holdTime = h;}
     public void setToExecuteStatus(boolean t){toExecuteStatus = t;}
     public void setExecutingStatus(boolean e){executingStatus = e;}
+    public void setCompletionTime(int c){completeTime=c;}
     
     public String getJob(){return job;}
     public int getArrivalTime(){return arrivalTime;}
@@ -39,4 +42,5 @@ public class Job {
     public int getHoldTime(){return holdTime;}
     public boolean getToExecuteStatus(){return toExecuteStatus;}
     public boolean getExecutingStatus(){return executingStatus;}
-}
+    public int getCompletionTime(){return completeTime;}
+    }
