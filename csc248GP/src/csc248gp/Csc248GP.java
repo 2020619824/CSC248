@@ -15,10 +15,8 @@ public class Csc248GP
         Queue executeQ = new Queue();
         Queue tempExecuteQ = new Queue();
         Queue waitQ = new Queue();
-        Queue tempDoneQ=new Queue();
         Queue doneQ = new Queue();
-        int completeTime=0;
-        int totalCompleteTime=0;
+        int numJob=0;
         double tt=0.0;
         double wt=0.0;
         double totalTT=0.0;
@@ -115,7 +113,8 @@ public class Csc248GP
                     {
                         temp.setExecutingStatus(false);
                         temp.setCompletionTime(n+1);
-                        tempDoneQ.enqueue(temp);
+                        doneQ.enqueue(temp);
+                        numJob++;
                     }
                     else
                         tempExecuteQ.enqueue(temp);
@@ -166,11 +165,6 @@ public class Csc248GP
                 executeQ.enqueue(temp);
             }
             
-            while(!tempDoneQ.isEmpty()){
-                temp=(Job) tempDoneQ.dequeue();
-                totalCompleteTime+=temp.getCompletionTime();
-                doneQ.enqueue(temp);
-            }
             
             while(!doneQ.isEmpty()){
                 temp=(Job)doneQ.dequeue();
@@ -183,8 +177,8 @@ public class Csc248GP
         }
         
         //dah dapat TT dgn WT
-        System.out.print("\nAverage turn-around time: "+totalTT/5);
-        System.out.print("\nAverage waiting time: "+totalWT/5);
+        System.out.print("\nAverage turn-around time: "+totalTT/numJob);
+        System.out.print("\nAverage waiting time: "+totalWT/numJob);
     }
     
     //sorting data yg ada dlm queue tu ikut burst time
