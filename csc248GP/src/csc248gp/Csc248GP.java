@@ -112,9 +112,9 @@ public class Csc248GP
                     if (n==(temp.getBurstTime()+temp.getHoldTime()+temp.getArrivalTime()-1))
                     {
                         temp.setExecutingStatus(false);
-                        temp.setCompletionTime(n+1);
+                        temp.setCompletionTime(n+1);//set completion time
                         doneQ.enqueue(temp);
-                        numJob++;
+                        numJob++;//increment number of job
                     }
                     else
                         tempExecuteQ.enqueue(temp);
