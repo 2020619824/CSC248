@@ -4,6 +4,11 @@ package csc248gp;
 kalau korang ade ape2 nak tambah/ubah buat je mane tahu lgi better.*/
 
 import java.util.Scanner;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 public class Csc248GP 
 {
     public static void main(String[] args) 
@@ -24,24 +29,50 @@ public class Csc248GP
         double wt=0.0;
         double totalTT=0.0;
         double totalWT=0.0;
+        
         //input
-        /*char loop = 'Y';
-        while (Character.toUpperCase(loop) == 'Y')
+        int loop = 0;
+        while (loop == 0)
         {
-            System.out.print("\nEnter Job: ");
-            String job = sc.nextLine();
-            System.out.print("Enter Arrival Time: ");
-            int aTime = Integer.parseInt(sc.nextLine());
-            System.out.print("Enter Burst Time: ");
-            int bTime = Integer.parseInt(sc.nextLine());
-            System.out.print("Do you to input more?: ");
-            loop = sc.nextLine().charAt(0);
+            JPanel panel = new JPanel();
+            JTextField jobName = new JTextField(5);
+            JTextField arrivalTime = new JTextField(5);
+            JTextField burstTime = new JTextField(5);
+
+            panel.add(new JLabel("Job Name:"));
+            panel.add(jobName);
+            panel.add(new JLabel("Arrival Time :"));
+            panel.add(arrivalTime);
+            panel.add(new JLabel("Burst Time:"));
+            panel.add(burstTime);
             
+            JOptionPane.showConfirmDialog(null, panel, "Enter Job Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            
+            String job = jobName.getText();
+            int aTime = Integer.parseInt(arrivalTime.getText());
+            int bTime = Integer.parseInt(burstTime.getText());
+
+            while (job.isEmpty() ||aTime == 0 || bTime == 0)
+            {
+                if (job.isEmpty())
+                    JOptionPane.showMessageDialog(null, "Please input name of the Job" ,"Invalid Input", JOptionPane.INFORMATION_MESSAGE);
+                if (aTime == 0 || bTime == 0)
+                    JOptionPane.showMessageDialog(null, "Time cannot be zero" ,"Invalid Input", JOptionPane.ERROR_MESSAGE);
+
+                JOptionPane.showConfirmDialog(null, panel, "Enter Job Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                job = jobName.getText();
+                aTime = Integer.parseInt(arrivalTime.getText());
+                bTime = Integer.parseInt(burstTime.getText());
+            }
+
             Job newJob = new Job(job, aTime, bTime);
             inputQ.enqueue(newJob);
-        }Penat nak input satu2 ;(*/
+
+            loop = JOptionPane.showConfirmDialog(null, "More Job to Input? ", "", JOptionPane.YES_NO_OPTION);
+        }
         
-        //nak senang input siap2
+        /*For Robust Testing
         Job A = new Job();
         Job B = new Job();
         Job C = new Job();
@@ -71,6 +102,7 @@ public class Csc248GP
         inputQ.enqueue(C);
         inputQ.enqueue(D);
         inputQ.enqueue(E);
+        */
         
         Job interupt = new Job();
         //time loop
