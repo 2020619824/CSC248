@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 public class Csc248GP 
 {
+    /*
     public static void main(String[] args) 
     {
         Scanner sc = new Scanner(System.in);
@@ -102,7 +103,7 @@ public class Csc248GP
         inputQ.enqueue(C);
         inputQ.enqueue(D);
         inputQ.enqueue(E);
-        */
+        
         
         Job interupt = new Job();
         //time loop
@@ -291,8 +292,251 @@ public class Csc248GP
         //dah dapat TT dgn WT
         System.out.print("\nAverage turn-around time: "+totalTT/numJob);
         System.out.print("\nAverage waiting time: "+totalWT/numJob);
-    }
+    }*/
     
+    ///*
+    public static void main(String[] args)
+    {
+        Queue inputQ = new Queue();
+        Queue tempNewQ = new Queue();
+        Queue readyQ = new Queue();
+        Queue executeQ = new Queue();
+        Queue tempExecuteQ = new Queue();
+        Queue waitQ = new Queue();
+        Queue tempWaitQ = new Queue();
+        Queue doneQ = new Queue();
+        Queue interruptedQ = new Queue();
+        
+        Job A = new Job();
+        Job B = new Job();
+        Job C = new Job();
+        Job D = new Job();
+        Job E = new Job();
+        
+        A.setJob("A");
+        B.setJob("B");
+        C.setJob("C");
+        D.setJob("D");
+        E.setJob("E");
+        
+        A.setArrivalTime(1);
+        B.setArrivalTime(3);
+        C.setArrivalTime(6);
+        D.setArrivalTime(6);
+        E.setArrivalTime(9);
+        
+        A.setBurstTime(10);
+        B.setBurstTime(1);
+        C.setBurstTime(3);
+        D.setBurstTime(1);
+        E.setBurstTime(2);
+        
+        inputQ.enqueue(A);
+        inputQ.enqueue(B);
+        inputQ.enqueue(C);
+        inputQ.enqueue(D);
+        inputQ.enqueue(E);
+        
+        boolean hasInterupt = true;
+        int numJob=0;
+        double tt=0.0;
+        double wt=0.0;
+        double totalTT=0.0;
+        double totalWT=0.0;
+        
+        boolean firstIsEx = false;
+        Job interrupt = new Job();
+        int time = 1;
+        for (int x=1; x<=time; x++)
+        {
+            Queue toSortQ = new Queue();
+            Queue checkInQ = new Queue();
+            Job firstEx = new Job();  
+            
+            System.out.println("\nTime: "+x);
+            Job temp;
+            
+            if (executeQ.isEmpty()&&readyQ.isEmpty()&&inputQ.isEmpty()&&interruptedQ.isEmpty())
+                System.out.println("End");
+            else
+                time++;
+            
+            while (!interruptedQ.isEmpty())
+            {
+                temp = (Job)interruptedQ.dequeue();
+                readyQ.enqueue(temp);
+            }
+            
+            if (readyQ.isEmpty()&&executeQ.isEmpty())
+                firstIsEx = false;
+            
+            while (!inputQ.isEmpty())
+            {
+                temp = (Job)inputQ.dequeue();
+                if (temp.getArrivalTime() <= x)
+                {
+                    temp.setToExecuteStatus(true);
+                    toSortQ.enqueue(temp);
+                    readyQ.enqueue(temp);
+                }
+                else
+                    tempNewQ.enqueue(temp);
+            }
+            
+            if (!toSortQ.isEmpty() && executeQ.isEmpty() && !firstIsEx)
+            {
+                toSortQ = BurstSorting(toSortQ);
+                firstEx = (Job)toSortQ.getFront();
+                firstEx.setExecutingStatus(true);
+                executeQ.enqueue(firstEx);
+                firstIsEx = true;
+            }
+            
+            while (!readyQ.isEmpty())
+            {
+                temp = (Job)readyQ.dequeue();
+                
+                if (!temp.equals(interrupt))
+                {
+                    if (executeQ.isEmpty() && hasInterupt)
+                        temp.setExecutingStatus(true);
+
+                    if (temp.getToExecuteStatus() && temp.getExecutingStatus() && !temp.equals(firstEx))
+                        executeQ.enqueue(temp);
+                    else if (temp.getToExecuteStatus() && !temp.getExecutingStatus())
+                        waitQ.enqueue(temp);
+                }
+                else
+                {
+                    temp.setExecutingStatus(true);
+                    hasInterupt = true;
+                    executeQ.enqueue(temp);
+                }
+            }
+           
+            int count=0;
+            while (!executeQ.isEmpty())
+            {
+                temp = (Job)executeQ.dequeue();
+                tempExecuteQ.enqueue(temp);
+                count++;
+            }
+            
+            for (int i=0; i<count; i++)
+            {
+                if (count>1)
+                {
+                    tempExecuteQ.dequeue();
+                    count--;
+                }
+            }
+            
+            while (!tempExecuteQ.isEmpty())
+            {
+                temp = (Job)tempExecuteQ.dequeue();
+                executeQ.enqueue(temp);
+            }
+                
+            while (!executeQ.isEmpty())
+            {
+                temp = (Job)executeQ.dequeue();
+                System.out.println("Job "+temp.getJob()+" is executing...");
+                if (x==(temp.getBurstTime()+temp.getHoldTime()+temp.getArrivalTime()-1))
+                {
+                    temp.setExecutingStatus(false);
+                    temp.setCompletionTime(x+1);
+                    doneQ.enqueue(temp);
+                    numJob++;
+                }
+                else
+                    tempExecuteQ.enqueue(temp);
+            }
+            
+            
+            while (!waitQ.isEmpty())
+            {
+                temp = (Job)waitQ.dequeue();
+                
+                if (x==temp.getArrivalTime())
+                {
+                    System.out.println("Job "+temp.getJob()+" has arrived...");
+                    temp.setHoldTime(1);
+                }
+                else 
+                {
+                    temp.setHoldTime(temp.getHoldTime()+1);
+                    System.out.println("Job "+temp.getJob()+" is in hold for "+temp.getHoldTime()+"ms...");
+                }
+                
+                tempWaitQ.enqueue(temp);
+            }
+            
+            
+            while (!tempNewQ.isEmpty())
+            {
+                temp = (Job)tempNewQ.dequeue();
+                if (temp.getArrivalTime()==time)
+                    checkInQ.enqueue(temp);
+                inputQ.enqueue(temp);
+            }
+            
+            checkInQ = BurstSorting(checkInQ);
+            
+            tempWaitQ = BurstSorting(tempWaitQ);
+            
+            Job temp2 = new Job();
+            while (!tempWaitQ.isEmpty())
+            {
+                temp = (Job)tempWaitQ.dequeue();
+                
+                if (tempExecuteQ.isEmpty())
+                {
+                    if (!checkInQ.isEmpty())
+                    {
+                        temp2 = (Job)checkInQ.getFront();
+
+                        if (temp.getBurstTime()<=temp2.getBurstTime())
+                        {
+                            readyQ.enqueue(temp);
+                        }
+                        else if (interruptedQ.isEmpty())
+                        {
+                            interrupt = temp2;
+                            hasInterupt = false;
+                            interruptedQ.enqueue(temp);
+                        }
+                    }
+                    else
+                    {
+                        temp.setExecutingStatus(true);
+                        tempExecuteQ.enqueue(temp);
+                    }
+                }
+                else
+                    readyQ.enqueue(temp);
+            }
+            
+            
+            while (!tempExecuteQ.isEmpty())
+            {
+                temp = (Job)tempExecuteQ.dequeue();
+                executeQ.enqueue(temp);
+            }
+            
+            while(!doneQ.isEmpty())
+            {
+                temp=(Job)doneQ.dequeue();
+                tt=temp.getCompletionTime()-temp.getArrivalTime();
+                wt=temp.getCompletionTime()-(temp.getArrivalTime()+temp.getBurstTime());
+                totalTT+=tt;
+                totalWT+=wt;
+            }
+        }
+        //dah dapat TT dgn WT
+        System.out.print("\nAverage turn-around time: "+totalTT/numJob);
+        System.out.println("\nAverage waiting time: "+totalWT/numJob);
+    }
+    //*/
     //sorting data yg ada dlm queue tu ikut burst time
     //https://youtu.be/Z0hQsqJQYoc : concept nak sorting queue
     public static Queue BurstSorting(Queue job)
