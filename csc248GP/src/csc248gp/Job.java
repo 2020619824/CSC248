@@ -10,6 +10,8 @@ public class Job {
     private boolean toExecuteStatus;
     private boolean executingStatus;
     private int completeTime;
+    private int turnaroundTime;
+    private int waitingTime;
     
     public Job()
     {
@@ -20,6 +22,8 @@ public class Job {
         toExecuteStatus = false;
         executingStatus = false;
         completeTime=0;
+        turnaroundTime = 0;
+        waitingTime = 0;
     }
     
     public Job(String j,int a,int b){
@@ -35,6 +39,8 @@ public class Job {
     public void setToExecuteStatus(boolean t){toExecuteStatus = t;}
     public void setExecutingStatus(boolean e){executingStatus = e;}
     public void setCompletionTime(int c){completeTime=c;}
+    public void setTurnaroundTime(int t){turnaroundTime = t;}
+    public void setWaitingTime(int w){waitingTime = w;}
     
     public String getJob(){return job;}
     public int getArrivalTime(){return arrivalTime;}
@@ -43,4 +49,6 @@ public class Job {
     public boolean getToExecuteStatus(){return toExecuteStatus;}
     public boolean getExecutingStatus(){return executingStatus;}
     public int getCompletionTime(){return completeTime;}
-    }
+    public int getTurnaroundTime(){return turnaroundTime;}
+    public int getWaitingTime(){return waitingTime;}
+}
