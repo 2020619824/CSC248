@@ -38,8 +38,6 @@ public class Csc248GP
         {
             boolean hasInterupt = true;
             int numJob=0;
-            double tt=0.0;
-            double wt=0.0;
             double totalTT=0.0;
             double totalWT=0.0;
 
